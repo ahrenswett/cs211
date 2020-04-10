@@ -8,15 +8,5 @@
     </content>
     <orderEntry type="jdk" jdkName="IntelliJ IDEA Community Edition IC-192.7142.36" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/jars" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/jars" recursive="false" />
-      </library>
-    </orderEntry>
   </component>
 </module>
