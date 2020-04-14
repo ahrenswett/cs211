@@ -2,7 +2,9 @@ package cs211;
 /*
 Ahren Swett 4/13/2020
 thought the "(null != (str.readLine())" was a cool bit of code had to think about it for a minute
-figured I'd throw in some data normalization as well :)
+Struggling with yes/no loop something is amiss in the way it is reading the "choice" string or the comparator "Y" or "N"
+GitHub
+https://github.com/ahrenswett/cs211/blob/master/src/main/java/cs211/ReadingURLJSON.java
  */
 
 import org.json.simple.JSONArray;
@@ -28,7 +30,7 @@ public class ReadingURLJSON {
         System.out.println("Please enter a country whose Covid19 information you would like to view.");
         String input = reader.readLine();
         if(!list.contains(input)){
-           System.out.println("please check your spelling no country found");
+           System.out.println("please check your spelling/punctuation no country found");
         }
         return input;
     }
