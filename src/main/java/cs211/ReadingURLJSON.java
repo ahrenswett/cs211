@@ -18,23 +18,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class ReadingURLJSON {
 //    class var to decide if it should ask user for more input
     private static Boolean askForMoreInput = true;
     private static String country="";
     private static ArrayList<String> countryList;
-
-
-    private static String prompt(BufferedReader reader, ArrayList<String> list) throws IOException {
-        System.out.println("Please enter a country whose Covid19 information you would like to view.");
-        String input = reader.readLine();
-        if(!list.contains(input)){
-           System.out.println("please check your spelling/punctuation no country found");
-        }
-        return input;
-    }
-
 
     public static void main(String[] args) throws Exception {
         StringBuilder builder = new StringBuilder();
@@ -63,7 +53,6 @@ public class ReadingURLJSON {
 
 
 //        figure out what country to query
-
         while (askForMoreInput == true) {
             country = prompt(userInput, countryList);
             JSONParser jsonParser = new JSONParser();
@@ -85,24 +74,48 @@ public class ReadingURLJSON {
                     System.out.println("recovered: " + daily.get("recovered"));
                 }
             }
-//            askAgain();
+            askAgain();
         }
     }
 
 
+
+    private static String prompt(BufferedReader reader, ArrayList<String> list) throws IOException {
+        System.out.println("Please enter a country whose Covid19 information you would like to view.");
+        String input = reader.readLine();
+        if(!list.contains(input)){
+            System.out.println("please check your spelling/punctuation no country found");
+        }
+        return input;
+    }
+
+
+
+    private static String prompt(Scanner reader, ArrayList<String> list) throws IOException {
+        System.out.println("Please enter a country whose Covid19 information you would like to view.");
+        String input = reader.next();
+        if(!list.contains(input)){
+            System.out.println("please check your spelling/punctuation no country found");
+        }
+        return input;
+    }
+
+
+
+// not used has problems.
     private static void askAgain() throws IOException {
-        BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+        Scanner userInput = new Scanner(new InputStreamReader(System.in));
         System.out.println("Would you like information on another country? please enter Y or N");
-        String choice = userInput.readLine();
+        String choice = userInput.next();
 
 //        TODO: Figure out why this is an endless loop
-        while(!choice.equalsIgnoreCase("Y") || !choice.equalsIgnoreCase("N")){
+        while(!(choice.equalsIgnoreCase("Y") || choice.equalsIgnoreCase("N"))){
             System.out.println("Would you like information on another country? please enter Y or N");
-            choice = userInput.readLine().toUpperCase();
+            choice = userInput.next();
         }
 
 //        take care of the users choice
-        if (choice.toUpperCase() == "Y"){
+        if (choice.equalsIgnoreCase("Y")){
             prompt(userInput,countryList);
         }else{
             askForMoreInput = false;
