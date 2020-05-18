@@ -3,37 +3,39 @@ package Burger211;
 import java.text.DecimalFormat;
 
 public class ROK extends Burger211 {
-    static double exchangeRate = 1000;  // foreign currency exchange rate
-    static double discountRate = 0.5;  // promotion 0.0~1.0
-    String info1 = "", info2 = "", info3 = ""; // will be sent to GUI (see slide #23) as parametres.
+    private static double exchangeRate = 1000;  // foreign currency exchange rate
+    private static double discountRate = 0.50;  // promotion 0.0~1.0
+    private String info1 = getName1(), info2 = getName2(), info3 = getName3(); // will be sent to GUI (see slide #23) as parametres.
 
-    ROK() {
-    } // constructor. Super class, Burger211, need to initialize first. Then KOREA will do next.
+    ROK() { } // constructor. Super class, Burger211, need to initialize first.
     // You must understand why.
     //
-    // @Override
 
-    String Menu(String franchiseName) {
-        DecimalFormat df = new DecimalFormat("#,###,##0.0");
+    @Override
+    void Menu(String franchiseName) {
 
-        if (discountRate>0.0) {
-
-            String p1 = df.format(getPrice1()*(1.0-discountRate));
-            info1 = name1 + " / " + "W" +p1 +" (was:" + getPrice1()+")";
-
-            String p2 = df.format(getPrice2()*(1.0-discountRate));
-            info2 = name2 + " / " + "W" +p2 +" (was:" + getPrice2()+")";
-
-            String p3 = df.format(getPrice3()*(1.0-discountRate));
-            info3 = name3 + " / " + "W" +p3 +" (was:" + getPrice3()+")";
-
+        if (discountRate> 0.00) {
+//            burger1 format if discount
+            String p1 = df.format(getPrice1()*(1.00-discountRate));
+            info1 += " / " + "W" +p1 +" (was: " + df.format(getPrice1())+")";
+//            burger2 format if discount
+            String p2 = df.format(getPrice2()*(1.00-discountRate));
+            info2 += " / " + "W" +p2 +" (was: " + df.format(getPrice2())+")";
+//            burger3 format if discount
+            String p3 = df.format(getPrice3()*(1.00-discountRate));
+            info3 += " / " + "W" +p3 +" (was: " + df.format(getPrice2())+")";
         } else {
-
-            info1 = name1 + " / " + "W" +getPrice1() ;
-            info2 = name2 + " / " + "W" +getPrice2() ;
-            info3 = name3 + " / " + "W" +getPrice3() ;
+//            burger format without discounts
+            info1 += " / " + "W" + df.format(getPrice1()) ;
+            info2 += " / " + "W" + df.format(getPrice2()) ;
+            info3 += " / " + "W" + df.format(getPrice3()) ;
         }
-        return null;
+        // call GUI
+        new MenuGUI(franchiseName,
+                info1, getTopping1(),
+                info2, getTopping2(),
+                info3, getTopping3(),
+                getPromotion());
 
     }
 
@@ -49,13 +51,17 @@ public class ROK extends Burger211 {
         return (super.getPrice2() * exchangeRate);
     }
 
+    @Override
     public double getPrice3() {
         return (super.getPrice3() * exchangeRate);
     }
 
     @Override
-    public String getAdvertising() {
-        return "^ Buy One Get One ZERO % off - CS211 Student Only ^";
+    public String getPromotion() {
+        if(discountRate > 0) {
+            //takes the discount rate and multiples it by 100 and casts as int to take from decimal to whole number
+            return "^ Buy One Get One " + (int)(discountRate*100) + " % off - CS211 Student Only ^";
+        }
+        return null;
     }
-
 }
