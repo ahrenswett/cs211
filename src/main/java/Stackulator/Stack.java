@@ -8,7 +8,10 @@ public class Stack<E>{
     public Stack(){
     }
 
-    public void push(E value){
+    public void push(E value, int location) {
+        top = new StackNode(value, location, top);
+    }
+    public void push(E value) {
         top = new StackNode(value, top);
     }
 
@@ -44,9 +47,16 @@ public class Stack<E>{
 
 class StackNode<E> {
      E data;
-    StackNode next;
+     E location;
+     StackNode next;
 
-     StackNode(E data, StackNode next) {
+     StackNode(E data,E location, StackNode next) {
+        this.data = data;
+        this.location = location;
+        this.next = next;
+    }
+
+    StackNode(E data, StackNode next) {
         this.data = data;
         this.next = next;
     }
