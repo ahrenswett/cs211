@@ -1,4 +1,4 @@
-package Stackulator;
+ package Stackulator;
 
 import java.util.*;
 
@@ -8,13 +8,11 @@ public class Stackulator {
 //    static HashMap<C>
     private static Stack<Character> characterStack;
     private static int answer;
-    private static String[] statement = {"(1 + 3) * (2) - 1)", "(1 + 3 * (2 - 1)", "1 + 3) * (2 - 1)", "(1 + 3) * (2 - 1)" };
+//    private static String[] statement = {"*B+C/D " };
     public static void main(String[] args) {
         errorsPrep();
         setPair();
-        postFix("(1 + 3) * (2 - 1)");
-
-        stackulator(statement);
+        stackulator("6 *3 + 2 / 1");
     }
 
     public static ArrayList<Integer> stackulator(String[] equations){
@@ -39,8 +37,8 @@ public class Stackulator {
     }
 
     public static void setPair(){
-        pair.put(')', '(');
-        pair.put('}', '{');
+        pair.put('(', ')');
+        pair.put('{', '}');
     }
 
     public static void printError(int location, int errorNo){
@@ -62,35 +60,33 @@ public class Stackulator {
 
     private static int bracketEvaluator(String equation)throws Error {
         characterStack = new Stack();
-        char temp = ' ';
+        char temp;
         int location = -1;
-        int lastOpenBracket = 0;
 //        is for loop better? Matter of preference?
         for (char chr : equation.toCharArray()) {
             location++;
 //            go throught the array and find any {( and push to stack
             if (chr == '(' || chr == '{') {
                 characterStack.push(chr, location);
-                lastOpenBracket = location;
             }
             if (chr == ')' || chr == '}') {
-                if (characterStack.isEmpty() || !pairOrNot((temp = ((char) characterStack.pop().data)), chr)) {
+                temp = (char) characterStack.pop().data;
+                if (characterStack.isEmpty() || !pairOrNot((temp), chr)) {
                     //                 Throw an error
-                    if (temp != pair.get(chr)) {
+                    if (chr != pair.get(temp)) {
                         System.out.println(equation);
-                        printError(lastOpenBracket, (int) pair.get(chr));
+                        printError(location, (int) pair.get(temp));
                         throw new Error();
                     }
                 }
             }
-            return postFix(equation);
         }
 
         while (!characterStack.isEmpty()) {
             StackNode tmpNode = characterStack.pop();
             throw new Error("Unmatched Bracket Found: " + tmpNode.data + " at " + tmpNode.location);
         }
-        return answer;
+        return postFix(equation);
     }
 
 
@@ -99,13 +95,16 @@ public class Stackulator {
     private static int postFix(String equation){
         characterStack = new Stack();
         String postfix = "";
+        int[] numbers = new int[equation.length()];
+
         for(int i=0; i < equation.length(); i++ ) {
             char c = equation.charAt(i);
-            if (c == '(' || c == '{') characterStack.push(c);
+//            if (c == '(' || c == '{') characterStack.push(c);
             if (c >= '0' && c <= '9') postfix += c;
-            if (c == '+' || c == '-' || c == '*' || c == '/') {
+            if (c == '+' || c == '-' || c == '*' || c == '/'){
                 characterStack.push(c);
-                /*TODO: add priority Hashmap */
+                /*TODO: add priority Hashmap
+                *  need to add a way to do numbers over 9 considered number node or array*/
             }
             if (c == '}' || c == ')') {
                 StackNode holder;
